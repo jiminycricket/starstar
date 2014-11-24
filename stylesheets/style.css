@@ -1,3 +1,22 @@
+
+
+/* Chrome, Safari, Opera */ 
+/*@-webkit-keyframes mymove {*/
+  /*  0%   {line-height:  20px;;}
+    25%  {line-height:  22px;}
+    50%  {line-height:  22px;}
+    75%  {line-height:  18px;}
+    100% {line-height:  20px;}
+} */
+
+/* Standard syntax */ 
+/*@keyframes mymove {
+    0%   {line-height:  20px;}
+    25%  {line-height:  22px;}
+    50%  {line-height:  22px;}
+    75%  {line-height:  18px;}
+    100% {line-height:  20px;}
+*/}
 /* line 1, ../../src/sass/style.sass */
 html, body {
   margin: 0px;
@@ -13,11 +32,16 @@ canvas {
 }
 h1{
   position: fixed;
-  color: white;
+  /*color: white;*/
   font-weight: 100;
   font-size: 300%;
   left: 10%;
   bottom: 20%;
   opacity: 0.3;
   text-align: center;
+  color: transparent;
+  text-shadow: 0 0 2px rgba(255,255,80,0.7);
+  
+
 }
+
