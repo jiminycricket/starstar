@@ -1,8 +1,8 @@
 "use strict";
 window.onload = function() {
-    setTimeout(start, 200);
+    setTimeout(start, 500);
 };
-
+var drawed = true;
 function start() {
 
     //Helpers
@@ -71,9 +71,9 @@ function start() {
         stars = [],
         shootingStars = [],
         layers = [
-            { speed: 0.015, scale: 0.2, count: 320 },
-            { speed: 0.03, scale: 0.5, count: 50 },
-            { speed: 0.05, scale: 0.75, count: 30 }
+            { speed: 0, scale: 0.1, count: 300 },
+            { speed: 0, scale: 0.3, count: 90 },
+            { speed: 0, scale: 0.45, count: 40 }
         ],
         starsAngle = 145,
         shootingStarSpeed = {
@@ -119,31 +119,36 @@ function start() {
         }, shootingStarLifeTime);
     }
 
-    function update() {
+    function update() { 
+        console.log("update");
         if (!paused) {
-            context.clearRect(0, 0, width, height);
-            context.fillStyle = "#101220";
-            context.fillRect(0, 0, width, height);
-            context.fill();
+            
+            if(drawed){
+                context.clearRect(0, 0, width, height);
+                context.fillStyle = "#101220";
+                context.fillRect(0, 0, width, height);
+                context.fill();
+                for (var i = 0; i < stars.length; i += 1) {
+                    var star = stars[i];
+                    star.update();
+                    drawStar(star);
+                    console.log("draw");
 
-            for (var i = 0; i < stars.length; i += 1) {
-                var star = stars[i];
-                star.update();
-                drawStar(star);
-                if (star.x > width) {
-                    star.x = 0;
-                }
-                if (star.x < 0) {
-                    star.x = width;
-                }
-                if (star.y > height) {
-                    star.y = 0;
-                }
-                if (star.y < 0) {
-                    star.y = height;
-                }
+                    if (star.x > width) {
+                        star.x = 0;
+                    }
+                    if (star.x < 0) {
+                        star.x = width;
+                    }
+                    if (star.y > height) {
+                        star.y = 0;
+                    }
+                    if (star.y < 0) {
+                        star.y = height;
+                    }
+                };
             }
-
+            drawed = false;
             for (i = 0; i < shootingStars.length; i += 1) {
                 var shootingStar = shootingStars[i];
                 if (shootingStar.isSpawning) {
@@ -164,7 +169,7 @@ function start() {
 
                 shootingStar.update();
                 if (shootingStar.opacity > 0.0) {
-                    drawShootingStar(shootingStar);
+                    // drawShootingStar(shootingStar);
                 }
             }
 
@@ -175,7 +180,9 @@ function start() {
                 }
             }
         }
-        requestAnimationFrame(update);
+        
+        spark();
+        // requestAnimationFrame(update);
     }
 
     function drawStar(star) {
@@ -184,6 +191,29 @@ function start() {
         context.arc(star.x, star.y, star.radius, 0, Math.PI * 2, false);
         context.fill();
     }
+    function undrawStar(star){
+        if(star){
+            context.fillStyle = "rgb(16, 18, 32)";
+            context.beginPath();
+            // console.log(star.x);
+            context.arc(star.x, star.y, star.radius, 0, Math.PI * 2, false);
+            context.fill();
+        }
+    }
+
+    function spark() {
+        var range = stars.length;
+        // for(var i = 0; i < range; i++){
+        //     console.log(range);
+        //     undrawStar(stars[i]);
+        // }
+        var time = Math.floor((Math.random() * 2000) + 500);
+        var i = Math.floor((Math.random() * range) + 1);
+        console.log(i);
+        undrawStar(stars[i]);
+        setTimeout(function(){drawStar(stars[i]);}, time);
+    };
+
 
     function drawShootingStar(p) {
         var x = p.x,
@@ -228,6 +258,7 @@ function start() {
     }
 
     //Run
+
     update();
 
     //Shooting stars
@@ -235,7 +266,8 @@ function start() {
         if (paused) return;
         createShootingStar();
     }, shootingStarEmittingInterval);
-
+    setInterval(spark, 100);
+    // setInterval(spark, 100);
     window.onfocus = function () {
       paused = false;
     };
